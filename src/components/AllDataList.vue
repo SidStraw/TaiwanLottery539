@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="desserts" class="elevation-1">
+  <v-data-table :headers="headers" :items="$store.state.lotteryRecord" id="data-table" class="elevation-1">
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>歷史開獎資料</v-toolbar-title>
@@ -54,7 +54,8 @@
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">Reset</v-btn>
+      <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
+      資料下載中...
     </template>
   </v-data-table>
 </template>
@@ -104,7 +105,7 @@ export default {
   },
 
   created() {
-    this.initialize()
+    // this.initialize()
   },
 
   methods: {
@@ -124,8 +125,9 @@ export default {
     },
 
     deleteItem(item) {
-      const index = this.desserts.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+      const { lotteryRecord } = this.$store.state
+      const index = lotteryRecord.findIndex(record => record.date === item.date)
+      confirm(`確定刪除 ${lotteryRecord[index].date} 此筆資料？`) && this.$store.commit('delLotteryRecord', index)
     },
 
     close() {

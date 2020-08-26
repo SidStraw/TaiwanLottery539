@@ -17,11 +17,40 @@
 </template>
 
 <script>
+import data2020 from '@/assets/2020data.json'
 export default {
   name: 'App',
 
   data: () => ({
     //
   }),
+  mounted() {
+    this.$store.dispatch('getLotteryRecord')
+  },
+  methods: {
+    addData() {
+      // Add a second document with a generated ID.
+      data2020.forEach(item => {
+        this.$db
+          .collection('lotteryRecord')
+          .doc(item.date)
+          .set(item)
+          .then(function() {
+            console.log('Document successfully written!')
+          })
+          .catch(function(error) {
+            console.error('Error writing document: ', error)
+          })
+      })
+    },
+  },
 }
 </script>
+<style lang="scss">
+#data-table {
+  td,
+  th {
+    font-size: 1.1rem;
+  }
+}
+</style>
