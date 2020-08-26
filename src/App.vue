@@ -6,16 +6,8 @@
       </div>
 
       <v-spacer></v-spacer>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-      <!-- <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn> -->
+      <v-btn text large to="/">開獎資料</v-btn>
+      <v-btn text large to="/Query">計算查詢</v-btn>
     </v-app-bar>
 
     <v-main>
