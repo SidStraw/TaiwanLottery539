@@ -7,7 +7,7 @@
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">New Item</v-btn>
+            <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">新增開獎資料</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -18,28 +18,57 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
+                    <v-menu
+                      ref="menu"
+                      v-model="menu"
+                      :close-on-content-click="false"
+                      :return-value.sync="editedItem.date"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="editedItem.date"
+                          label="開獎日期"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker v-model="editedItem.date" no-title scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn text color="primary" @click="menu = false">取消</v-btn>
+                        <v-btn text color="primary" @click="$refs.menu.save(editedItem.date)">確定</v-btn>
+                      </v-date-picker>
+                    </v-menu>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4" v-for="n in 5" :key="'numInput' + n">
+                    <v-text-field v-model="editedItem.num[n - 1]" :label="`數字${n}`"></v-text-field>
+                  </v-col>
+                  <!-- <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.n1" type="tel" maxlength="2" label="數字1"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
+                    <v-text-field v-model="editedItem.n2" label="數字2"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
+                    <v-text-field v-model="editedItem.n3" label="數字3"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
+                    <v-text-field v-model="editedItem.n4" label="數字4"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
-                  </v-col>
+                    <v-text-field v-model="editedItem.n5" label="數字5"></v-text-field>
+                  </v-col> -->
                 </v-row>
               </v-container>
             </v-card-text>
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              <v-btn color="blue darken-1" text @click="close">取消</v-btn>
+              <v-btn color="blue darken-1" text @click="save">儲存</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -65,6 +94,8 @@ import data2020 from '@/assets/2020data'
 export default {
   data: () => ({
     dialog: false,
+    date: new Date().toISOString().substr(0, 10),
+    menu: false,
     headers: [
       { text: '開獎日期', value: 'date', align: 'center' },
       { text: '數字1', value: 'n1', align: 'center', sortable: false },
@@ -77,24 +108,18 @@ export default {
     desserts: [],
     editedIndex: -1,
     editedItem: {
-      name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+      date: new Date().toISOString().substr(0, 10),
+      num: [],
     },
     defaultItem: {
-      name: '',
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+      date: new Date().toISOString().substr(0, 10),
+      num: [],
     },
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      return this.editedIndex === -1 ? '新增開獎資料' : '修改資料'
     },
   },
 
@@ -109,13 +134,16 @@ export default {
   },
 
   methods: {
+    headerDateFormat(e) {
+      console.log(e)
+    },
     initialize() {
-      const sirtData = data2020.sort((a, b) => {
+      const sortData = data2020.sort((a, b) => {
         if (a.date < b.date) return 1
         if (a.date > b.date) return -1
         return 0
       })
-      this.desserts = sirtData
+      this.desserts = sortData
     },
 
     editItem(item) {
