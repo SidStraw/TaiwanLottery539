@@ -21,7 +21,7 @@ export default new Vuex.Store({
       state.lotteryRecord.unshift(item)
     },
     editLotteryRecord(state, { index, record }) {
-      state.lotteryRecord.splice(index, record)
+      state.lotteryRecord.splice(index, 1, record)
     },
     delLotteryRecord(state, index) {
       state.lotteryRecord.splice(index, 1)
