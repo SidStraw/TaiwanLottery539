@@ -141,7 +141,11 @@ export default {
       // } else {
       //   this.desserts.push(this.editedItem)
       // }
-      this.$store.dispatch('setLotteryRecord', { index: this.editedIndex, record: this.editedItem })
+      this.editedItem.num = this.editedItem.num.map(val => val.replace(/^(\d)$/, '0$1')).sort()
+      this.$store.dispatch('setLotteryRecord', {
+        index: this.editedIndex,
+        record: this.editedItem,
+      })
       this.close()
     },
   },
