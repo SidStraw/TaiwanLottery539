@@ -5,7 +5,7 @@
         <v-toolbar-title>歷史開獎資料</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="500px">
+        <v-dialog v-model="dialog" persistent max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">新增開獎資料</v-btn>
           </template>
@@ -46,21 +46,6 @@
                   <v-col cols="12" sm="6" md="4" v-for="n in 5" :key="'numInput' + n">
                     <v-text-field v-model="editedItem.num[n - 1]" :label="`數字${n}`"></v-text-field>
                   </v-col>
-                  <!-- <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.n1" type="tel" maxlength="2" label="數字1"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.n2" label="數字2"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.n3" label="數字3"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.n4" label="數字4"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.n5" label="數字5"></v-text-field>
-                  </v-col> -->
                 </v-row>
               </v-container>
             </v-card-text>
@@ -83,14 +68,16 @@
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
       資料下載中...
     </template>
   </v-data-table>
 </template>
 
 <script>
-import data2020 from '@/assets/2020data'
+const defaultItem = {
+  date: new Date().toISOString().substr(0, 10),
+  num: [],
+}
 export default {
   data: () => ({
     dialog: false,
@@ -98,20 +85,16 @@ export default {
     menu: false,
     headers: [
       { text: '開獎日期', value: 'date', align: 'center' },
-      { text: '數字1', value: 'n1', align: 'center', sortable: false },
-      { text: '數字2', value: 'n2', align: 'center', sortable: false },
-      { text: '數字3', value: 'n3', align: 'center', sortable: false },
-      { text: '數字4', value: 'n4', align: 'center', sortable: false },
-      { text: '數字5', value: 'n5', align: 'center', sortable: false },
+      { text: '數字1', value: 'num[0]', align: 'center', sortable: false },
+      { text: '數字2', value: 'num[1]', align: 'center', sortable: false },
+      { text: '數字3', value: 'num[2]', align: 'center', sortable: false },
+      { text: '數字4', value: 'num[3]', align: 'center', sortable: false },
+      { text: '數字5', value: 'num[4]', align: 'center', sortable: false },
       { text: 'Actions', value: 'actions', align: 'center', sortable: false },
     ],
-    desserts: [],
+    desserts: [{ date: '1111-11-11', num: [1, 2, 3, 4, 5] }],
     editedIndex: -1,
     editedItem: {
-      date: new Date().toISOString().substr(0, 10),
-      num: [],
-    },
-    defaultItem: {
       date: new Date().toISOString().substr(0, 10),
       num: [],
     },
@@ -129,25 +112,10 @@ export default {
     },
   },
 
-  created() {
-    // this.initialize()
-  },
-
   methods: {
-    headerDateFormat(e) {
-      console.log(e)
-    },
-    initialize() {
-      const sortData = data2020.sort((a, b) => {
-        if (a.date < b.date) return 1
-        if (a.date > b.date) return -1
-        return 0
-      })
-      this.desserts = sortData
-    },
-
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item)
+      const { lotteryRecord } = this.$store.state
+      this.editedIndex = lotteryRecord.findIndex(record => record.date === item.date)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
@@ -155,23 +123,25 @@ export default {
     deleteItem(item) {
       const { lotteryRecord } = this.$store.state
       const index = lotteryRecord.findIndex(record => record.date === item.date)
-      confirm(`確定刪除 ${lotteryRecord[index].date} 此筆資料？`) && this.$store.commit('delLotteryRecord', index)
+      confirm(`確定刪除 ${lotteryRecord[index].date} 此筆資料？`) &&
+        this.$store.dispatch('delLotteryRecord', { index, record: item })
     },
 
     close() {
       this.dialog = false
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedItem = Object.assign({}, defaultItem)
         this.editedIndex = -1
       })
     },
 
     save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem)
-      } else {
-        this.desserts.push(this.editedItem)
-      }
+      // if (this.editedIndex > -1) {
+      //   Object.assign(this.desserts[this.editedIndex], this.editedItem)
+      // } else {
+      //   this.desserts.push(this.editedItem)
+      // }
+      this.$store.dispatch('setLotteryRecord', { index: this.editedIndex, record: this.editedItem })
       this.close()
     },
   },
