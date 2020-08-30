@@ -8,15 +8,15 @@
     sort-by="calories"
     class="elevation-1"
   >
-    <template v-slot:top>
+    <!-- <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>計算查詢結果</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
       </v-toolbar>
-    </template>
+    </template> -->
     <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">Reset</v-btn>
+      沒有符合的資料
     </template>
   </v-data-table>
 </template>
@@ -26,12 +26,12 @@ export default {
   data: () => ({
     dialog: false,
     headers: [
-      { text: '開獎日期', value: 'date' },
-      { text: '數字1', value: 'n1', sortable: false },
-      { text: '數字2', value: 'n2', sortable: false },
-      { text: '數字3', value: 'n3', sortable: false },
-      { text: '數字4', value: 'n4', sortable: false },
-      { text: '數字5', value: 'n5', sortable: false },
+      { text: '開獎日期', value: 'date', sortable: false },
+      { text: '數字1', value: 'num[0]', align: 'center', sortable: false },
+      { text: '數字2', value: 'num[1]', align: 'center', sortable: false },
+      { text: '數字3', value: 'num[2]', align: 'center', sortable: false },
+      { text: '數字4', value: 'num[3]', align: 'center', sortable: false },
+      { text: '數字5', value: 'num[4]', align: 'center', sortable: false },
     ],
     desserts: [],
     editedIndex: -1,

@@ -1,13 +1,14 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
+    <v-app-bar app color="primary" dark class="noprint">
+      <div class="d-flex align-center" v-if="$vuetify.breakpoint.smAndUp">
         <v-toolbar-title>今彩539</v-toolbar-title>
       </div>
 
       <v-spacer></v-spacer>
-      <v-btn text large to="/">開獎資料</v-btn>
-      <v-btn text large to="/Query">計算查詢</v-btn>
+      <v-btn text to="/">開獎資料</v-btn>
+      <v-btn text to="/Query">計算查詢</v-btn>
+      <v-btn color="#78909C" @click="print">列印</v-btn>
     </v-app-bar>
 
     <v-main>
@@ -43,10 +44,22 @@ export default {
           })
       })
     },
+    print() {
+      window.print()
+    },
   },
 }
 </script>
 <style lang="scss">
+@media print {
+  .noprint {
+    display: none !important;
+  }
+}
+@page {
+  size: A4 portrait;
+  margin-left: 0 auto;
+}
 #data-table {
   td,
   th {
