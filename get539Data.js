@@ -40,22 +40,25 @@ const getData = (year, month) => {
             .text()
             .replace(/\//g, '-')
             .replace(/^.\d*-/, `${year + 1911}-`),
-          n1: $(element)
+          num: [
+            $(element)
             .find(`#D539Control_history1_dlQuery_No1_${index}`)
             .text(),
-          n2: $(element)
+            $(element)
             .find(`#D539Control_history1_dlQuery_No2_${index}`)
             .text(),
-          n3: $(element)
+            $(element)
             .find(`#D539Control_history1_dlQuery_No3_${index}`)
             .text(),
-          n4: $(element)
+            $(element)
             .find(`#D539Control_history1_dlQuery_No4_${index}`)
             .text(),
-          n5: $(element)
+            $(element)
             .find(`#D539Control_history1_dlQuery_No5_${index}`)
             .text(),
+          ],
         }
+        newsItem.num.sort()
         dataList.push(newsItem)
       })
       resolve(dataList)
