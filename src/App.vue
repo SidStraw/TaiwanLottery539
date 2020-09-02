@@ -27,6 +27,7 @@ export default {
   }),
   mounted() {
     this.$store.dispatch('getLotteryRecord')
+    // this.addData()
   },
   methods: {
     addData() {
