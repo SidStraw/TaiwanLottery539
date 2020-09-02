@@ -22,7 +22,7 @@
       </v-col>
     </v-row>
     <QueryDataList :desserts="desserts" />
-    <v-textarea class="mt-5" rows="3" label="備註" auto-grow></v-textarea>
+    <v-textarea class="note-area mt-3" rows="2" label="備註" auto-grow></v-textarea>
   </v-container>
 </template>
 
@@ -75,5 +75,9 @@ export default {
 }
 .rule-area ::v-deep input {
   text-align: center;
+}
+.note-area ::v-deep textarea {
+  font-size: 2rem;
+  line-height: 3.5rem;
 }
 </style>

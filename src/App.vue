@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app color="primary" dark class="noprint">
       <div class="d-flex align-center" v-if="$vuetify.breakpoint.smAndUp">
-        <v-toolbar-title>今彩539</v-toolbar-title>
+        <v-toolbar-title>今彩539輔助運算工具</v-toolbar-title>
       </div>
 
       <v-spacer></v-spacer>

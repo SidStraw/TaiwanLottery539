@@ -1,5 +1,6 @@
 <template>
   <v-data-table
+    id="data-table"
     :headers="headers"
     :items="desserts"
     :items-per-page="12"
@@ -24,7 +25,7 @@ export default {
   },
   data: () => ({
     headers: [
-      { text: '開獎日期', value: 'date', sortable: false },
+      { text: '開獎日期', value: 'date', align: 'center', sortable: false },
       { text: '數字1', value: 'num[0]', align: 'center', sortable: false },
       { text: '數字2', value: 'num[1]', align: 'center', sortable: false },
       { text: '數字3', value: 'num[2]', align: 'center', sortable: false },
