@@ -6,9 +6,12 @@
       </div>
 
       <v-spacer></v-spacer>
-      <v-btn text to="/">開獎資料</v-btn>
-      <v-btn text to="/Query">計算查詢</v-btn>
-      <v-btn color="#78909C" @click="print">列印</v-btn>
+      <template v-if="!/\/login/i.test($route.path)">
+        <v-btn text to="/">開獎資料</v-btn>
+        <v-btn text to="/query">計算查詢</v-btn>
+        <v-btn color="#78909C" @click="print">列印</v-btn>
+        <v-btn text @click="logout">登出</v-btn>
+      </template>
     </v-app-bar>
 
     <v-main>
@@ -18,6 +21,8 @@
 </template>
 
 <script>
+import firebase from 'firebase/app'
+import 'firebase/auth'
 import data2020 from '@/assets/2020data.json'
 export default {
   name: 'App',
@@ -26,7 +31,16 @@ export default {
     //
   }),
   mounted() {
-    this.$store.dispatch('getLotteryRecord')
+    if (firebase.auth().currentUser) this.$store.dispatch('getLotteryRecord')
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        console.log('登入用戶：', user.email, 'uid:', user.uid)
+        this.$store.dispatch('getLotteryRecord')
+        if (/\/login/i.test(this.$route.path)) this.$router.push('/')
+      } else {
+        this.$router.push('/login')
+      }
+    })
     // this.addData()
   },
   methods: {
@@ -47,6 +61,13 @@ export default {
     },
     print() {
       window.print()
+      // console.log(firebase.auth().currentUser)
+    },
+    logout() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {})
     },
   },
 }
