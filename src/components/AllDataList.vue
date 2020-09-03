@@ -1,5 +1,11 @@
 <template>
-  <v-data-table :headers="headers" :items="$store.state.lotteryRecord" id="data-table" class="elevation-1">
+  <v-data-table
+    :headers="headers"
+    :items="$store.state.lotteryRecord"
+    id="data-table"
+    class="elevation-1"
+    mobile-breakpoint="300"
+  >
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>歷史開獎資料</v-toolbar-title>

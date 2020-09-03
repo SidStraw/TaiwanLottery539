@@ -82,10 +82,12 @@ export default {
   size: A4 portrait;
   margin-left: 0 auto;
 }
-#data-table {
-  td,
-  th {
-    font-size: 1.1rem;
+@media screen and (min-width: 600px) {
+  #data-table {
+    td,
+    th {
+      font-size: 1.1rem;
+    }
   }
 }
 </style>

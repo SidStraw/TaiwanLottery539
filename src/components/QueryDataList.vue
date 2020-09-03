@@ -8,6 +8,7 @@
     hide-default-footer
     sort-by="calories"
     class="elevation-1"
+    mobile-breakpoint="300"
   >
     <template v-slot:no-data>
       沒有符合的資料
