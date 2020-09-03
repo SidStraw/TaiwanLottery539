@@ -17,4 +17,14 @@ module.exports = {
       ],
     },
   },
+  pwa: {
+    name: '539',
+    iconPaths: {
+      favicon32: null,
+      favicon16: null,
+      appleTouchIcon: null,
+      maskIcon: null,
+      msTileImage: null,
+    },
+  },
 }
