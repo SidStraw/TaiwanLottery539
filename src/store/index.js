@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import db from '@/plugins/firestore'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 
 Vue.use(Vuex)
 
@@ -36,7 +38,11 @@ export default new Vuex.Store({
           querySnapshot.forEach(doc => record.push(doc.data()))
           commit('setAllLotteryRecord', record)
         })
-        .catch(err => console.warn('資料抓取異常：', err))
+        .catch(err => {
+          firebase.auth().signOut()
+          alert('登入逾期或權限不足，請重新登入')
+          console.warn('資料抓取異常：', err)
+        })
     },
     setLotteryRecord({ commit }, { index, record }) {
       db.collection('lotteryRecord')
