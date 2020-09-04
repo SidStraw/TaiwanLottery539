@@ -67,16 +67,19 @@ const getData = (year, month) => {
 }
 
 ;(async () => {
-  const year = 109
+  // const year = 109
   const allYearData = []
   postData = { ...postData, ...(await getToken()) }
-  for (let m = 1; m <= 12; m++) {
-    allYearData.push(...(await getData(year, m)))
+
+  for (let year = 103; year <= 109 ; year++) {
+    for (let m = 1; m <= 12; m++) {
+      allYearData.push(...(await getData(year, m)))
+    }
   }
   const sortData = allYearData.sort((a, b) => {
     if (a.date < b.date) return -1
     if (a.date > b.date) return 1
     return 0
   })
-  fs.writeFileSync(`./src/assets/${year + 1911}Data.json`, JSON.stringify(sortData, null, 2))
+  fs.writeFileSync(`./src/assets/Data.json`, JSON.stringify(sortData, null, 2))
 })()
