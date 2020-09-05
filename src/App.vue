@@ -34,7 +34,7 @@ export default {
     if (firebase.auth().currentUser) this.$store.dispatch('getLotteryRecord')
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log('登入用戶：', user.email, 'uid:', user.uid)
+        console.log('登入用戶：', user.email)
         this.$store.dispatch('getLotteryRecord')
         if (/\/login/i.test(this.$route.path)) this.$router.push('/')
       } else {
@@ -77,6 +77,12 @@ export default {
   .noprint {
     display: none !important;
   }
+  #data-table {
+    td,
+    th {
+      font-size: 1.6rem;
+    }
+  }
 }
 @page {
   size: A4 portrait;
@@ -86,7 +92,7 @@ export default {
   #data-table {
     td,
     th {
-      font-size: 1.1rem;
+      font-size: 1.6rem;
     }
   }
 }
