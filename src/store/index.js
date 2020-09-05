@@ -3,26 +3,23 @@ import Vuex from 'vuex'
 import db from '@/plugins/firestore'
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import lotteryRecorda from '@/assets/Data.json'
+import lotteryRecords from '@/assets/Data.json'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    lotteryRecord: lotteryRecorda.sort((a, b) => {
-      if (a.date < b.date) return 1
-      if (a.date > b.date) return -1
-      return 0
-    }),
+    lotteryRecord: [],
   },
   mutations: {
     setAllLotteryRecord(state, data) {
-      const sirtData = data.sort((a, b) => {
+      const allDate = [...lotteryRecords.filter(record => !data.some(item => item.date === record.date)), ...data]
+      const sirtData = allDate.sort((a, b) => {
         if (a.date < b.date) return 1
         if (a.date > b.date) return -1
         return 0
       })
-      state.lotteryRecord = [...state.lotteryRecord, ...sirtData]
+      state.lotteryRecord = sirtData
     },
     addLotteryRecord(state, item) {
       state.lotteryRecord.unshift(item)
